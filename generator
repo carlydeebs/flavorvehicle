@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flavor Vehicle</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .logo {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .food-emoji {
+            font-size: 3em;
+        }
+
+        .truck-emoji {
+            font-size: 2.5em;
+        }
+
+        .description {
+            color: #666;
+            font-size: 1.1em;
+            line-height: 1.6;
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 15px;
+            backdrop-filter: blur(5px);
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 2.5em;
+            font-weight: 700;
+        }
+
+        .categories {
+            display: flex;
+            gap: 30px;
+            margin-bottom: 40px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .category {
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .category h2 {
+            color: #555;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .result-box {
+            background: #f8f9fa;
+            border: 2px dashed #ddd;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 20px;
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+            font-weight: 600;
+            color: #666;
+            transition: all 0.3s ease;
+        }
+
+        .result-box.has-result {
+            background: linear-gradient(135deg, #ffeaa7 0%, #fab1a0 100%);
+            border-color: #fdcb6e;
+            color: #2d3436;
+            transform: scale(1.02);
+        }
+
+        .generate-btn {
+            background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.2em;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(116, 185, 255, 0.4);
+        }
+
+        .generate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(116, 185, 255, 0.6);
+        }
+
+        .generate-btn:active {
+            transform: translateY(0);
+        }
+
+        .final-result {
+            background: linear-gradient(135deg, #fd79a8 0%, #fdcb6e 100%);
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 30px;
+            font-size: 1.8em;
+            font-weight: 700;
+            color: #2d3436;
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 30px rgba(253, 121, 168, 0.3);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease;
+        }
+
+        .recipe-search {
+            margin-top: 20px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease;
+        }
+
+        .recipe-search.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .recipe-btn {
+            background: linear-gradient(135deg, #e17055 0%, #d63031 100%);
+            color: white;
+            border: none;
+            padding: 15px 35px;
+            font-size: 1.1em;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(225, 112, 85, 0.4);
+        }
+
+        .recipe-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(225, 112, 85, 0.6);
+        }
+
+        .recipe-btn:active {
+            transform: translateY(0);
+        }
+
+        .edit-section {
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #eee;
+        }
+
+        .edit-section h3 {
+            color: #555;
+            margin-bottom: 20px;
+            font-size: 1.2em;
+        }
+
+        .edit-lists {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .edit-category {
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .edit-category h4 {
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        textarea {
+            width: 100%;
+            height: 120px;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-family: inherit;
+            font-size: 14px;
+            resize: vertical;
+            transition: border-color 0.3s ease;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #74b9ff;
+        }
+
+        .update-btn {
+            background: linear-gradient(135deg, #00b894 0%, #00a085 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1em;
+            font-weight: 600;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .update-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 5px 15px rgba(0, 184, 148, 0.4);
+        }
+
+        @media (max-width: 768px) {
+            .categories, .edit-lists {
+                flex-direction: column;
+            }
+            
+            .category, .edit-category {
+                min-width: 100%;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            .container {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">
+                <span class="food-emoji">🍽️</span>
+                <span class="truck-emoji">🚛</span>
+            </div>
+            <h1>Flavor Vehicle</h1>
+            <p class="description">Click Generate My Meal to randomly choose a flavor profile and a vehicle to deliver it to your mouth. Once you find a combo you like, click Find Recipes to see what you can make with that combo. Perfect for helping you think up creative new dinner ideas!</p>
+        </div>
+        
+        <div class="categories">
+            <div class="category">
+                <h2>Flavor</h2>
+                <div class="result-box" id="flavorResult">?</div>
+            </div>
+            <div class="category">
+                <h2>Vehicle</h2>
+                <div class="result-box" id="mealResult">?</div>
+            </div>
+        </div>
+
+        <button class="generate-btn" onclick="generateCombo()">
+            🎲 Generate My Meal!
+        </button>
+
+        <div class="final-result" id="finalResult"></div>
+        
+        <div class="recipe-search" id="recipeSearch" style="display: none;">
+            <button class="recipe-btn" onclick="searchRecipes()">
+                🔍 Find Recipes for This Combo
+            </button>
+        </div>
+
+        <div class="edit-section">
+            <h3>✏️ Customize Your Options</h3>
+            <div class="edit-lists">
+                <div class="edit-category">
+                    <h4>Flavors (one per line):</h4>
+                    <textarea id="flavorsInput" placeholder="Buffalo&#10;French Onion&#10;BBQ&#10;Teriyaki&#10;Cajun&#10;Garlic Parmesan&#10;Honey Mustard&#10;Spicy Mayo&#10;Ranch&#10;Caesar"></textarea>
+                </div>
+                <div class="edit-category">
+                    <h4>Vehicles (one per line):</h4>
+                    <textarea id="mealsInput" placeholder="Tacos&#10;Burgers&#10;Pizza&#10;Pasta&#10;Stir-fry&#10;Sandwiches&#10;Salad&#10;Wraps&#10;Rice Bowl&#10;Quesadillas"></textarea>
+                </div>
+            </div>
+            <button class="update-btn" onclick="updateLists()">Update Lists</button>
+        </div>
+    </div>
+
+    <script>
+        // Default lists
+        let flavors = [
+            "Buffalo", "French Onion", "BBQ", "Teriyaki", "Cajun", 
+            "Garlic Parmesan", "Honey Mustard", "Spicy Mayo", "Ranch", "Caesar"
+        ];
+
+        let meals = [
+            "Tacos", "Burgers", "Pizza", "Pasta", "Stir-fry", 
+            "Sandwiches", "Salad", "Wraps", "Rice Bowl", "Quesadillas"
+        ];
+
+        // Initialize textareas with default values
+        document.getElementById('flavorsInput').value = flavors.join('\n');
+        document.getElementById('mealsInput').value = meals.join('\n');
+
+        // Store current combination for recipe search
+        let currentCombo = '';
+
+        function getRandomItem(array) {
+            return array[Math.floor(Math.random() * array.length)];
+        }
+
+        function generateCombo() {
+            const flavorResult = document.getElementById('flavorResult');
+            const mealResult = document.getElementById('mealResult');
+            const finalResult = document.getElementById('finalResult');
+            const recipeSearch = document.getElementById('recipeSearch');
+
+            // Reset final result and recipe search
+            finalResult.classList.remove('show');
+            recipeSearch.classList.remove('show');
+            recipeSearch.style.display = 'none';
+            finalResult.textContent = '';
+
+            // Generate random selections
+            const selectedFlavor = getRandomItem(flavors);
+            const selectedMeal = getRandomItem(meals);
+
+            // Store current combination
+            currentCombo = `${selectedFlavor} ${selectedMeal}`;
+
+            // Animate the results
+            setTimeout(() => {
+                flavorResult.textContent = selectedFlavor;
+                flavorResult.classList.add('has-result');
+            }, 200);
+
+            setTimeout(() => {
+                mealResult.textContent = selectedMeal;
+                mealResult.classList.add('has-result');
+            }, 400);
+
+            setTimeout(() => {
+                finalResult.textContent = `🍽️ ${currentCombo}`;
+                finalResult.classList.add('show');
+            }, 800);
+
+            setTimeout(() => {
+                recipeSearch.style.display = 'block';
+                recipeSearch.classList.add('show');
+            }, 1200);
+        }
+
+        function searchRecipes() {
+            if (currentCombo) {
+                const searchQuery = encodeURIComponent(`${currentCombo} recipe`);
+                const googleSearchUrl = `https://www.google.com/search?q=${searchQuery}`;
+                window.open(googleSearchUrl, '_blank');
+            }
+        }
+
+        function updateLists() {
+            const flavorsText = document.getElementById('flavorsInput').value;
+            const mealsText = document.getElementById('mealsInput').value;
+
+            // Update arrays with new values
+            flavors = flavorsText.split('\n').filter(item => item.trim() !== '').map(item => item.trim());
+            meals = mealsText.split('\n').filter(item => item.trim() !== '').map(item => item.trim());
+
+            // Reset results
+            document.getElementById('flavorResult').textContent = '?';
+            document.getElementById('mealResult').textContent = '?';
+            document.getElementById('flavorResult').classList.remove('has-result');
+            document.getElementById('mealResult').classList.remove('has-result');
+            document.getElementById('finalResult').classList.remove('show');
+            document.getElementById('recipeSearch').classList.remove('show');
+            document.getElementById('recipeSearch').style.display = 'none';
+            currentCombo = '';
+
+            alert('Lists updated! Ready to generate new combinations.');
+        }
+
+        // Add some fun interactions
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add subtle animations on load
+            const container = document.querySelector('.container');
+            container.style.opacity = '0';
+            container.style.transform = 'translateY(20px)';
+            
+            setTimeout(() => {
+                container.style.transition = 'all 0.8s ease';
+                container.style.opacity = '1';
+                container.style.transform = 'translateY(0)';
+            }, 100);
+        });
+    </script>
+</body>
+</html>
